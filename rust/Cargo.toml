@@ -1,0 +1,10 @@
+[package]
+name = "adventofcode"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde_json = { version = "1.0", features = [] }
+itertools = "0.13.0"
+petgraph = "0.6.5"
+regex = "1.11.1"
