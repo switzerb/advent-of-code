@@ -14,7 +14,7 @@ partTwo :: String -> Int
 partTwo input = length (takeWhile (>=0) $ scanl1 (+) $ floors input) + 1
 
 main = do
-    input <- readFile "day01_input.txt"
+    input <- readFile "y2015-d01-input.txt"
     assert_equal 0 (partOne "(())") "example one"
     assert_equal 0 (partOne "()()") "example two"
     assert_equal 280 (partOne input) "part one"

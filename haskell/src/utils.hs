@@ -3,14 +3,6 @@ module Utils
 , putStrLns
 ) where
 
-import qualified Data.List as List
-
-numUniques :: (Eq a) => [a] -> Int
-numUniques = length . List.nub
-
-penis :: Int -> String
-penis x = unwords (replicate x "penis")
-
 assert_equal :: (Eq a, Show a) => a -> a -> String -> IO ()
 assert_equal expected actual message = putStrLn ("[Test: " ++ message ++ "]") >>
     if expected == actual
