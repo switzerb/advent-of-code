@@ -89,5 +89,8 @@ executable haskell
     -- Directories containing source files.
     hs-source-dirs:   app
 
+    -- Extra source files to be included (data files, etc.)
+    extra-source-files: app/*.txt
+
     -- Base language which the package is written in.
     default-language: Haskell2010
