@@ -1,5 +1,5 @@
 module Grid
-( Point(..)
+( Point
 , manhattanDistance
 ) where
 
