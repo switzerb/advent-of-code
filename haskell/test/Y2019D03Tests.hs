@@ -1,7 +1,6 @@
 module Y2019D03Tests where
 
 import Test.HUnit
-import Grid
 import Y2019D03 (partOne)
 
 exampleOne :: String
@@ -26,10 +25,16 @@ testExampleThree :: Test
 testExampleThree = TestCase $ do
     assertEqual "Example three should return 135" 135 (partOne exampleThree)
 
+testPartOne :: Test
+testPartOne = TestCase $ do
+    input <- readFile "app/y2019-d03-input.txt"
+    assertEqual "Part one should return 375" 375 (partOne input)
+
 -- Test suite
 y2019D03Tests :: Test
 y2019D03Tests = TestList [
     TestLabel "exampleOne" testExampleOne,
     TestLabel "exampleTwo" testExampleTwo,
-    TestLabel "exampleThree" testExampleThree
+    TestLabel "exampleThree" testExampleThree,
+    TestLabel "partOne" testPartOne
     ]

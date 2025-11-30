@@ -75,6 +75,23 @@ This project uses [HUnit](https://hackage.haskell.org/package/HUnit) for unit te
    cabal test --test-show-details=direct
    ```
 
+4. **Run a specific test suite**:
+
+   You can run a specific test suite using `cabal repl` to load the test environment:
+
+   ```bash
+   cabal repl tests
+   ```
+
+   Then in GHCi, you can run a specific test:
+
+   ```haskell
+   :l test/Tests.hs
+   runTestTT y2019D03Tests  -- Run only the y2019-d03 tests
+   ```
+
+   Alternatively, you can temporarily modify `test/Tests.hs` to only include the test suite you want to run.
+
 To add new tests, edit `test/Tests.hs` and add your test cases using HUnit's `TestCase` or `TestList` functions. The test suite has access to all library modules (`Grid`, `Utils`, etc.).
 
 ### Project Structure
