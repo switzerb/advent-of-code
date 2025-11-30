@@ -48,7 +48,7 @@ build-type:         Simple
 extra-doc-files:    CHANGELOG.md
 
 -- Extra source files to be distributed with the package, such as examples, or a tutorial module.
--- extra-source-files:
+extra-source-files: app/*.txt
 
 common warnings
     ghc-options: -Wall
@@ -60,9 +60,12 @@ library
     -- Modules exported by the library.
     exposed-modules:  Grid
                    , Utils
+                   , Y2019D03
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.18.3.0
+                   , containers
+                   , split ^>=0.2.5
 
     -- Directories containing source files.
     hs-source-dirs:   src
@@ -89,8 +92,29 @@ executable haskell
     -- Directories containing source files.
     hs-source-dirs:   app
 
-    -- Extra source files to be included (data files, etc.)
-    extra-source-files: app/*.txt
+    -- Base language which the package is written in.
+    default-language: Haskell2010
+
+test-suite tests
+    -- Import common warning flags.
+    import:           warnings
+
+    -- Test suite type and main file.
+    type:             exitcode-stdio-1.0
+    main-is:          Tests.hs
+
+    -- Modules included in this test suite, other than Main.
+    other-modules:    Y2019D03Tests
+
+    -- Other library packages from which modules are imported.
+    build-depends:    aoc-haskell
+                   , base ^>=4.18.3.0
+                   , containers
+                   , HUnit
+                   , split ^>=0.2.5
+
+    -- Directories containing source files.
+    hs-source-dirs:   test
 
     -- Base language which the package is written in.
     default-language: Haskell2010

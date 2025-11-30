@@ -53,8 +53,33 @@ This project uses [Cabal](https://www.haskell.org/cabal/) for building and depen
    main
    ```
 
+### Running Tests
+
+This project uses [HUnit](https://hackage.haskell.org/package/HUnit) for unit testing. Tests are located in the `test/` directory.
+
+1. **Run all tests**:
+
+   ```bash
+   cabal test
+   ```
+
+2. **Build tests only** (without running):
+
+   ```bash
+   cabal build --enable-tests
+   ```
+
+3. **Run tests with verbose output**:
+
+   ```bash
+   cabal test --test-show-details=direct
+   ```
+
+To add new tests, edit `test/Tests.hs` and add your test cases using HUnit's `TestCase` or `TestList` functions. The test suite has access to all library modules (`Grid`, `Utils`, etc.).
+
 ### Project Structure
 
 - `app/` - Contains the solver files and `Main.hs`
 - `src/` - Contains shared library modules (`Grid`, `Utils`)
+- `test/` - Contains unit tests using HUnit (`Tests.hs`)
 - `app/*.txt` - Input data files for the puzzles
