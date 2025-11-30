@@ -15,20 +15,20 @@ exampleThree = "R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51\nU98,R91,D20,R16,D67
 -- Test cases
 testExampleOne :: Test
 testExampleOne = TestCase $ do
-    assertEqual "Example one should return 6" 6 (partOne exampleOne)
+    assertEqual "Example one" 6 (partOne exampleOne)
 
 testExampleTwo :: Test
 testExampleTwo = TestCase $ do
-    assertEqual "Example two should return 159" 159 (partOne exampleTwo)
+    assertEqual "Example two" 159 (partOne exampleTwo)
 
 testExampleThree :: Test
 testExampleThree = TestCase $ do
-    assertEqual "Example three should return 135" 135 (partOne exampleThree)
+    assertEqual "Example three" 135 (partOne exampleThree)
 
 testPartOne :: Test
 testPartOne = TestCase $ do
     input <- readFile "app/y2019-d03-input.txt"
-    assertEqual "Part one should return 375" 375 (partOne input)
+    assertEqual "Part one" 375 (partOne input)
 
 -- Test suite
 y2019D03Tests :: Test
