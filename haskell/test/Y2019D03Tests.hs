@@ -27,7 +27,7 @@ testExampleThree = TestCase $ do
 
 testPartOne :: Test
 testPartOne = TestCase $ do
-    input <- readFile "app/y2019-d03-input.txt"
+    input <- readFile "input/y2019-d03-input.txt"
     assertEqual "Part one" 375 (partOne input)
 
 -- Test suite

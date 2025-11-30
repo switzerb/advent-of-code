@@ -1,7 +1,6 @@
 module Y2019D03 where
 
 import Grid
-import Utils (assert_equal)
 import Data.List.Split (splitOn)
 import Data.Set (Set, fromList, intersection, delete, toList)
 
@@ -25,6 +24,7 @@ move ('R',dist) = (dist, 0)
 move ('L',dist) = (-dist, 0)
 move ('U',dist) = (0, -dist)
 move ('D',dist) = (0, dist)
+move _ = error "Direction not recognized"
 
 
 -- Pairs each point with the next one in the list.
@@ -77,6 +77,7 @@ tracePath input = map (fromList . travel) deltas
 
 crossedWires :: [Set Point] -> Set Point
 crossedWires [wireA, wireB] = intersection wireA wireB
+crossedWires _ = error "Unexpected data"
 
 
 partOne :: String -> Int

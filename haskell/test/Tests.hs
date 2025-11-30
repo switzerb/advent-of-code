@@ -2,6 +2,7 @@ module Main where
 
 import Test.HUnit
 import Grid
+import Y2015D01Tests (y2015D01Tests)
 import Y2019D03Tests (y2019D03Tests)
 
 -- Example test cases
@@ -15,6 +16,7 @@ testManhattanDistance = TestCase $ do
 tests :: Test
 tests = TestList [
     TestLabel "manhattanDistance" testManhattanDistance,
+    TestLabel "y2015-d01--not-quite-lisp" y2015D01Tests,
     TestLabel "y2019-d03--crossed-wires" y2019D03Tests
     ]
 

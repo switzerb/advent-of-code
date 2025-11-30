@@ -48,7 +48,7 @@ build-type:         Simple
 extra-doc-files:    CHANGELOG.md
 
 -- Extra source files to be distributed with the package, such as examples, or a tutorial module.
-extra-source-files: app/*.txt
+extra-source-files: input/*.txt
 
 common warnings
     ghc-options: -Wall
@@ -60,6 +60,7 @@ library
     -- Modules exported by the library.
     exposed-modules:  Grid
                    , Utils
+                   , Y2015D01
                    , Y2019D03
 
     -- Other library packages from which modules are imported.
@@ -104,7 +105,8 @@ test-suite tests
     main-is:          Tests.hs
 
     -- Modules included in this test suite, other than Main.
-    other-modules:    Y2019D03Tests
+    other-modules:    Y2015D01Tests
+                   , Y2019D03Tests
 
     -- Other library packages from which modules are imported.
     build-depends:    aoc-haskell
