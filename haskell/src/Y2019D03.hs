@@ -5,6 +5,7 @@ import Data.List.Split (splitOn)
 import qualified Data.Set as DS
 import qualified Data.Map as DM
 import Debug.Trace (traceShow)
+import Control.Applicative (liftA2)
 
 -- https://adventofcode.com/2019/day/3
 
@@ -71,8 +72,8 @@ travel instructions = concatMap (tail . uncurry expandSegment) (segmentStartEnd 
 
 -- Takes a list of Points and pairs each point with its step count (index)
 -- Example: stepCounts [(0,0), (1,0), (2,0)] = [((0,0), 0), ((1,0), 1), ((2,0), 2)]
-stepCounts :: [Point] -> [(Point,Int)]
-stepCounts path = zip path [0..]
+stepCounts :: [Point] -> DM.Map Point Int
+stepCounts path = DM.fromList (zip path [1..])
 
 
 traceAnotherPath :: [[Instr]] -> [[Point]]
@@ -95,6 +96,19 @@ crossedWires [wireA, wireB] = DS.intersection wireA wireB
 crossedWires _ = error "Unexpected data"
 
 
+doit :: [[Instr]] -> Int
+doit parsed = 
+   let paths = traceAnotherPath parsed
+       result = tracePath parsed
+       intersections = crossedWires result
+       remaining = DS.delete (0,0) intersections
+       withSteps = map stepCounts paths
+       wireA = head withSteps
+       wireB = withSteps !! 1  -- Get the second map (index 1)
+       whatever = map (\point -> liftA2 (+) (DM.lookup point wireA) (DM.lookup point wireB)) (DS.toList remaining)
+   in traceShow whatever 0
+
+
 partOne :: String -> Int
 partOne input = do
     let parsed = parse input
@@ -107,6 +121,6 @@ partOne input = do
 partTwo :: String -> Int
 partTwo input =
     let parsed = parse input
-        something = traceAnotherPath parsed
+        something = doit parsed
     in traceShow something 0
 

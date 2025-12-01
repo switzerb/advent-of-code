@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-typed-holes #-}
 module Y2019D03Tests where
 
 import Test.HUnit
