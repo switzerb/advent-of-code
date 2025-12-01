@@ -1,7 +1,7 @@
 module Y2019D03Tests where
 
 import Test.HUnit
-import Y2019D03 (partOne)
+import Y2019D03 (partOne, partTwo)
 
 exampleOne :: String
 exampleOne = "R8,U5,L5,D3\nU7,R6,D4,L4"
@@ -30,11 +30,17 @@ testPartOne = TestCase $ do
     input <- readFile "input/y2019-d03-input.txt"
     assertEqual "Part one" 375 (partOne input)
 
+testPartTwo :: Test
+testPartTwo = TestCase $ do
+    assertEqual "Part two, example one" 0 (partTwo "R8,U5,L5,D3\nU7,R6,D4,L4")
+
+
 -- Test suite
 y2019D03Tests :: Test
 y2019D03Tests = TestList [
     TestLabel "exampleOne" testExampleOne,
     TestLabel "exampleTwo" testExampleTwo,
     TestLabel "exampleThree" testExampleThree,
-    TestLabel "partOne" testPartOne
+    TestLabel "partOne" testPartOne,
+    TestLabel "p2exampleOne" testPartTwo
     ]

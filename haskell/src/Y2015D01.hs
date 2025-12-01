@@ -13,3 +13,4 @@ partOne input = sum $ floors input
 partTwo :: String -> Int
 partTwo input = length (takeWhile (>=0) $ scanl1 (+) $ floors input) + 1
 
+

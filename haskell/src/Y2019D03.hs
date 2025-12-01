@@ -2,7 +2,9 @@ module Y2019D03 where
 
 import Grid
 import Data.List.Split (splitOn)
-import Data.Set (Set, fromList, intersection, delete, toList)
+import qualified Data.Set as DS
+import qualified Data.Map as DM
+import Debug.Trace (traceShow)
 
 -- https://adventofcode.com/2019/day/3
 
@@ -18,7 +20,11 @@ parse input = map parseLine $ lines input
     parseInstr _ = error "Invalid instruction format"
 
 
--- Maps an instruction to a delta Point
+-- Maps an instruction to a delta Point (x,y) according to it's direction.
+-- Deltas can be applied to describe movement on the grid
+-- example ('R',8) -> (8,0)
+-- example ('D',3) -> (0,3)
+-- example ('U',5) -> (0,-5)
 move :: Instr -> Point
 move ('R',dist) = (dist, 0)
 move ('L',dist) = (-dist, 0)
@@ -27,18 +33,16 @@ move ('D',dist) = (0, dist)
 move _ = error "Direction not recognized"
 
 
--- Pairs each point with the next one in the list.
--- zip pairs corresponding elements from two lists
--- tail returns all elements except the first.
+-- Creates a list of ((start Point),(end Point)) tuples that describe each segment of a path
 -- Example: If endpoints = [(0,0), (8,0), (8,-5), (3,-5), (3,-2)]
 --   tail endpoints = [(8,0), (8,-5), (3,-5), (3,-2)]
 --   consecutivePairs endpoints = [((0,0), (8,0)), ((8,0), (8,-5)), ((8,-5), (3,-5)), ((3,-5), (3,-2))]
 -- This creates pairs of consecutive endpoints to generate the intermediate points
-consecutivePairs :: [Point] -> [(Point, Point)]
-consecutivePairs endpoints = zip endpoints (tail endpoints)
+segmentStartEnd :: [Point] -> [(Point, Point)]
+segmentStartEnd endpoints = zip endpoints (tail endpoints)
 
 
--- Determines the step direction between two coordinates.
+-- Determines the step direction between two coordinates so we which way to walk
 -- signum returns 1 for positive numbers, -1 for negative numbers, and 0 for zero.
 -- If end > start, signum returns 1 (step forward: start+1, start+2, ...)
 -- If end < start, signum returns -1 (step backward: start-1, start-2, ...)
@@ -49,8 +53,8 @@ stepDirection :: Int -> Int -> Int
 stepDirection start end = signum (end - start)
 
 
-pointsBetween :: Point -> Point -> [Point]
-pointsBetween (x1, y1) (x2, y2)
+expandSegment :: Point -> Point -> [Point]
+expandSegment (x1, y1) (x2, y2)
       | x1 == x2 && y1 == y2 = [(x1, y1)]
       | x1 == x2 = [(x1, y) | y <- [y1, y1 + stepDirection y1 y2 .. y2]] -- move on y axis
       | y1 == y2 = [(x, y1) | x <- [x1, x1 + stepDirection x1 x2 .. x2]] -- move on x axis
@@ -61,22 +65,33 @@ pointsBetween (x1, y1) (x2, y2)
 -- Returns a list of Points traveled on the grid starting at (0,0)
 -- For example, delta (0,4) from (0,0) returns [(0,0),(0,1),(0,2),(0,3),(0,4)]
 travel :: [Point] -> [Point]
-travel instructions = concatMap (\(p1, p2) -> pointsBetween p1 p2) (consecutivePairs endpoints)
+travel instructions = concatMap (tail . uncurry expandSegment) (segmentStartEnd endpoints)
   where
     endpoints = scanl (\(x,y) (dx,dy) -> (x + dx, y + dy)) (0,0) instructions
 
+-- Takes a list of Points and pairs each point with its step count (index)
+-- Example: stepCounts [(0,0), (1,0), (2,0)] = [((0,0), 0), ((1,0), 1), ((2,0), 2)]
+stepCounts :: [Point] -> [(Point,Int)]
+stepCounts path = zip path [0..]
+
+
+traceAnotherPath :: [[Instr]] -> [[Point]]
+traceAnotherPath input = map travel deltas
+    where
+      deltas = map turnEndpoint input
+      turnEndpoint = map move
 
 -- Takes a series of instructions [ [('R',8),('U',5),('L',5),('D',3)] , [('U',7),('R',6),('D',4),('L',4)] ]
 -- Returns the path of the wire as a list of Sets of Points
-tracePath :: [[Instr]] -> [Set Point]
-tracePath input = map (fromList . travel) deltas
+tracePath :: [[Instr]] -> [DS.Set Point]
+tracePath input = map (DS.fromList . travel) deltas
     where
-      coords wire = map move wire
-      deltas = map coords input
+      deltas = map turnEndpoint input
+      turnEndpoint = map move
 
 
-crossedWires :: [Set Point] -> Set Point
-crossedWires [wireA, wireB] = intersection wireA wireB
+crossedWires :: [DS.Set Point] -> DS.Set Point
+crossedWires [wireA, wireB] = DS.intersection wireA wireB
 crossedWires _ = error "Unexpected data"
 
 
@@ -85,7 +100,13 @@ partOne input = do
     let parsed = parse input
     let result = tracePath parsed
     let intersections = crossedWires result
-    let remaining = delete (0,0) intersections
-    let something = map (manhattanDistance (0,0)) (toList remaining)
+    let remaining = DS.delete (0,0) intersections
+    let something = map (manhattanDistance (0,0)) (DS.toList remaining)
     minimum something
+
+partTwo :: String -> Int
+partTwo input =
+    let parsed = parse input
+        something = traceAnotherPath parsed
+    in traceShow something 0
 

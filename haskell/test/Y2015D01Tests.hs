@@ -42,3 +42,4 @@ y2015D01Tests = TestList [
     TestLabel "partTwo" testPartTwo
     ]
 
+
