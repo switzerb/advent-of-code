@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { partOne, partTwo } from "./d01-secret-entrance";
-import fs from "node:fs";
-import { join } from "node:path";
+import { readInput } from "../lib/utils";
 
-const data = fs.readFileSync(join(__dirname, "inputs/d01.txt"), "utf8");
+const data = readInput("y2025/inputs/d01.txt");
 
 const example_input = [
 	"L68",
@@ -22,18 +21,16 @@ const ex2 = ["L6", "R6"];
 
 const input = data.split("\n");
 
-describe("part one", () => {
-	it("runs", () => {
+describe("solutions", () => {
+	it("part one runs", () => {
 		expect(partOne(example_input)).toStrictEqual(3);
 	});
 
 	it("returns an answer for part one", () => {
 		expect(partOne(input)).toStrictEqual(1139);
 	});
-});
 
-describe("part two", () => {
-	it("runs", () => {
+	it("part two runs", () => {
 		expect(partTwo(example_input)).toStrictEqual(6);
 	});
 
@@ -48,4 +45,5 @@ describe("part two", () => {
 	it("returns an answer for part two", () => {
 		expect(partTwo(input)).toStrictEqual(6684);
 	});
+
 });

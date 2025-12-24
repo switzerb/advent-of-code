@@ -11,10 +11,16 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      radashi:
+        specifier: ^12.7.1
+        version: 12.7.1
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
         version: 1.9.4
+      '@certes/lazy':
+        specifier: ~0.1.0
+        version: 0.1.0
       '@certes/list':
         specifier: ~0.1.0
         version: 0.1.0
@@ -85,6 +91,14 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
+
+  '@certes/composition@0.1.0':
+    resolution: {integrity: sha512-lO0qtH5CGaulAzWkUtFW+e72nYIa9Jvtw+i/YNWrtxO2uHead1VTxHlNPzt8Tmict8q9ZAC+ufulCwqTag9p3A==}
+    engines: {node: 22.x, pnpm: 10.x}
+
+  '@certes/lazy@0.1.0':
+    resolution: {integrity: sha512-NhDI9J0BUH0LOwL2jE7Mt5cEhUMGqi3+1ZqcDoGZIhWn/JSm6ahc/QwnZ49cnCBMV4VdC5tT0/iPjSlqeHxRvA==}
+    engines: {node: 22.x, pnpm: 10.x}
 
   '@certes/list@0.1.0':
     resolution: {integrity: sha512-i2MpyHY5eenC+kGHGziAkjo/Wgb01t7Nm8ea7tgQ18+I9fR2ARc7AUrk4Ud4NmUAWd4Jx5mEclBDDEcts5CPUg==}
@@ -493,6 +507,10 @@ packages:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
+  radashi@12.7.1:
+    resolution: {integrity: sha512-rwxcGY3oKMQJ+ojhS4MlxyVWqdXPVJSxg3ZjXDYYz26DYRuAAs+7XBM406/GYzPEBbjSJqdKfHDpBRfjWn34RQ==}
+    engines: {node: '>=16.0.0'}
+
   rollup@4.54.0:
     resolution: {integrity: sha512-3nk8Y3a9Ea8szgKhinMlGMhGMw89mqule3KWczxhIzqudyHdCIOHw8WJlj/r329fACjKLEh13ZSk7oE22kyeIw==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -655,6 +673,12 @@ snapshots:
 
   '@biomejs/cli-win32-x64@1.9.4':
     optional: true
+
+  '@certes/composition@0.1.0': {}
+
+  '@certes/lazy@0.1.0':
+    dependencies:
+      '@certes/composition': 0.1.0
 
   '@certes/list@0.1.0': {}
 
@@ -945,6 +969,8 @@ snapshots:
       nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  radashi@12.7.1: {}
 
   rollup@4.54.0:
     dependencies:
