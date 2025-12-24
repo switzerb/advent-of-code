@@ -15,3 +15,4 @@ partTwo input = length (takeWhile (>=0) $ scanl1 (+) $ floors input) + 1
 
 
 
+
