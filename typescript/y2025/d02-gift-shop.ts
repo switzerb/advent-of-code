@@ -32,7 +32,7 @@ export function isMoreInvalid(n: number) {
     // if they are all the same number, then it's invalid
     if(everyItemEqual(digits)) return true;
 
-    const options = [...range(2, Math.floor(digits.length / 2))];
+    const options = collect(range(2, Math.floor(digits.length / 2)));
 
     for(const option of options) {
         const arrays = collect(chunk(option)(digits));
