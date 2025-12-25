@@ -1,5 +1,6 @@
 import {chunk, collect, range} from "@certes/lazy";
-import {isArrayEqual, assert} from "radashi";
+import {isArrayEqual} from "radashi";
+import {allArraysEqual, toDigits} from "../lib/utils";
 
 type Range = [number, number];
 
@@ -19,16 +20,13 @@ export function isInvalid(n: number) {
     const digits = n.toString().split("");
     if(digits.length % 2 !== 0) return false;
     if(everyItemEqual(digits)) return true;
-    const [start,end] = collect(chunk(digits.length / 2)(digits));
+    const [firstHalf, secondHalf] = collect(chunk(digits.length / 2)(digits));
 
-    return isArrayEqual(start, end);
+    return isArrayEqual(firstHalf, secondHalf);
 }
-
-
 
 export function isMoreInvalid(n: number) {
     const digits = n.toString().split("");
-
     // if they are all the same number, then it's invalid
     if(everyItemEqual(digits)) return true;
 
@@ -62,16 +60,7 @@ export function partOne(input: string) {
         .reduce((a,b) => a+b,0);
 }
 
-export function allArraysEqual(...arrays: string[][]): boolean {
-  if (arrays.length < 2) {
-    return true; // If there are 0 or 1 arrays, they're considered equal
-  }
 
-  const firstArray = arrays[0];
-  
-  // Check if all arrays are equal to the first array
-  return arrays.every(array => isArrayEqual(firstArray, array));
-}
 
 export function partTwo(input: string) {
     const ranges = parse(input);

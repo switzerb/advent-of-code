@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import {join} from "node:path";
+import {isArrayEqual} from "radashi";
 
 /**
  * Converts a number to an array of its individual digits
@@ -24,6 +25,17 @@ export function toDigits(num: number): number[] {
     }
 
     return digits;
+}
+
+export function allArraysEqual<T>(...arrays: T[][]): boolean {
+    if (arrays.length < 2) {
+        return true; // If there are 0 or 1 arrays, they're considered equal
+    }
+
+    const firstArray = arrays[0];
+
+    // Check if all arrays are equal to the first array
+    return arrays.every(array => isArrayEqual(firstArray, array));
 }
 
 export function readInput(path: string) {

@@ -27,6 +27,9 @@ importers:
       '@certes/list':
         specifier: ~0.1.0
         version: 0.1.0
+      '@certes/logic':
+        specifier: ~0.1.0
+        version: 0.1.0
       '@types/lodash':
         specifier: ^4.17.13
         version: 4.17.21
@@ -105,6 +108,10 @@ packages:
 
   '@certes/list@0.1.0':
     resolution: {integrity: sha512-i2MpyHY5eenC+kGHGziAkjo/Wgb01t7Nm8ea7tgQ18+I9fR2ARc7AUrk4Ud4NmUAWd4Jx5mEclBDDEcts5CPUg==}
+    engines: {node: 22.x, pnpm: 10.x}
+
+  '@certes/logic@0.1.0':
+    resolution: {integrity: sha512-c5XjOzO03fakCa70+/wPPQCSlqtsobRFxuDmF22FY3obMYskNPfYyyj2ySlBP923YDNQaKB34DjLyOtcmNK7vQ==}
     engines: {node: 22.x, pnpm: 10.x}
 
   '@esbuild/aix-ppc64@0.25.12':
@@ -684,6 +691,8 @@ snapshots:
       '@certes/composition': 0.1.0
 
   '@certes/list@0.1.0': {}
+
+  '@certes/logic@0.1.0': {}
 
   '@esbuild/aix-ppc64@0.25.12':
     optional: true
