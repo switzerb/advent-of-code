@@ -29,7 +29,7 @@ describe('puzzle solutions', () => {
     });
 
     it('returns an answer for part one', () => {
-        // expect(partOne(example)).toStrictEqual(1227775554);
+        expect(partOne(example)).toStrictEqual(1227775554);
         expect(partOne(input)).toStrictEqual(64215794229);
     });
 

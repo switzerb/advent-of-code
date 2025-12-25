@@ -11,22 +11,24 @@ const parse = (input: string) : Range[] => input
             .map(it => Number(it.trim().replace('\n','')))
         ).map(it => it as Range);
 
-export function everyItemEqual(digits: string[]) {
+export function everyItemEqual(digits: string) {
     if(digits.length < 2) return false;
-    return digits.every(it => it === digits[0]);
+    return digits.split("").every(it => it === digits[0]);
 }
 
 export function isInvalid(n: number) {
-    const digits = n.toString().split("");
-    if(digits.length % 2 !== 0) return false;
-    if(everyItemEqual(digits)) return true;
-    const [firstHalf, secondHalf] = collect(chunk(digits.length / 2)(digits));
+    const digits = n.toString();
+    if (digits.length % 2 !== 0) return false;
+    if (everyItemEqual(digits)) return true;
+    const mid = digits.length / 2;
+    const firstHalf = digits.substring(0, mid);
+    const secondHalf = digits.substring(mid);
 
-    return isArrayEqual(firstHalf, secondHalf);
+    return firstHalf === secondHalf;
 }
 
 export function isMoreInvalid(n: number) {
-    const digits = n.toString().split("");
+    const digits = n.toString();
     // if they are all the same number, then it's invalid
     if(everyItemEqual(digits)) return true;
 
