@@ -18,6 +18,9 @@ importers:
       '@biomejs/biome':
         specifier: 1.9.4
         version: 1.9.4
+      '@certes/composition':
+        specifier: ~0.1.0
+        version: 0.1.0
       '@certes/lazy':
         specifier: ~0.1.0
         version: 0.1.0

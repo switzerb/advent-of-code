@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {isInvalid, partOne} from "./d02-gift-shop";
+import {isInvalid, isMoreInvalid, partOne, partTwo} from "./d02-gift-shop";
 import {readInput} from "../lib/utils";
 
 const input = readInput("y2025/inputs/d02.txt");
@@ -31,5 +31,27 @@ describe('puzzle solutions', () => {
     it('returns an answer for part one', () => {
         expect(partOne(example)).toStrictEqual(1227775554);
         expect(partOne(input)).toStrictEqual(64215794229);
-    })
+    });
+
+    it('checks for more invalid ids', () => {
+        expect(isMoreInvalid(55)).toStrictEqual(true);
+        expect(isMoreInvalid(99)).toStrictEqual(true);
+        expect(isMoreInvalid(111)).toStrictEqual(true);
+        expect(isMoreInvalid(1010)).toStrictEqual(true);
+        expect(isMoreInvalid(101)).toStrictEqual(false);
+        expect(isMoreInvalid(565656)).toStrictEqual(true);
+        expect(isMoreInvalid(1188511885)).toStrictEqual(true);
+        expect(isMoreInvalid(824824824)).toStrictEqual(true);
+        expect(isMoreInvalid(1188511886)).toStrictEqual(false);
+        expect(isMoreInvalid(2121212121)).toStrictEqual(true);
+    });
+
+    it('returns an answer for part two example', () => {
+        expect(partTwo(example)).toStrictEqual(4174379265);
+    });
+
+    it("returns an answer for part two", () => {
+        expect(partTwo(input)).toStrictEqual(85513235135);
+    }, 14000);
+
 })
