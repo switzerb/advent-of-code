@@ -1,7 +1,6 @@
-import {chunk, collect, range} from "@certes/lazy";
+import {chunk, collect, filter, range} from "@certes/lazy";
 import {allArraysEqual} from "../lib/utils";
 import {pipe} from "@certes/composition";
-import {filter} from "@certes/list";
 
 type Range = [number, number];
 
@@ -40,12 +39,12 @@ export function isMoreInvalid(n: number) {
     return false;
 }
 
-export function sumOfInvalidIds(items: number[], isInvalid: (n: number) => boolean): number {
+export function sumOfInvalidIds(items: number[], isInvalid: (n: number) => boolean){
     const invalidIds =  pipe(
         filter((n: number) => isInvalid(n)),
         collect,
     )(items);
-    return invalidIds.reduce((a: number,b: number) => a+b, 0) as number;
+    return invalidIds.reduce((a: number,b: number) => a+b, 0)
 }
 
 const buildRanges = ([start, end]: Range) => range(start, end);
@@ -54,7 +53,7 @@ export function partOne(input: string) {
     return parse(input)
         .map(buildRanges)
         .map((items: number[]) => sumOfInvalidIds(items, isInvalid))
-        .reduce((a,b) => a+b,0);
+        .reduce((a:number,b:number) => a+b,0);
 }
 
 
@@ -62,5 +61,5 @@ export function partTwo(input: string) {
     return parse(input)
         .map(buildRanges)
         .map((items: number[]) => sumOfInvalidIds(items, isMoreInvalid))
-        .reduce((a,b) => a+b,0);
+        .reduce((a:number,b:number) => a+b,0);
 }
