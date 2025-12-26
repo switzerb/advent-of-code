@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { partOne, partTwo } from "./d20-race-condition";
-import { TimeUtils } from "./utils";
+import { TimeUtils } from "../lib/utils";
 
 const example = `
 ###############

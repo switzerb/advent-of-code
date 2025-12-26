@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { partOne, partTwo } from "./d16-reindeer-maze";
-import { TimeUtils } from "./utils";
+import { TimeUtils } from "../lib/utils";
 
 const simple = `
 #######

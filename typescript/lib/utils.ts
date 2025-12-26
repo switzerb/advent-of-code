@@ -38,6 +38,22 @@ export function allArraysEqual<T>(...arrays: T[][]): boolean {
     return arrays.every(array => isArrayEqual(firstArray, array));
 }
 
+/** Shamelessly stolen from
+ *. https://github.com/ArrayKnight/advent-of-code/blob/main/src/utils.ts#L163
+ *  because it is a very handy utility
+ */
+export const TimeUtils = {
+    log: <T>(callback: () => T, label = "runtime") => {
+        console.time(label);
+
+        const result = callback();
+
+        console.timeEnd(label);
+
+        return result;
+    },
+};
+
 export function readInput(path: string) {
     return fs.readFileSync(join(__dirname, `../${path}`), "utf8");
 }

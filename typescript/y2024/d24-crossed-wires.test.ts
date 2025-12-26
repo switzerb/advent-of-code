@@ -3,7 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { partOne, partTwo } from "./d24-crossed-wires";
 import func from "./d24_ray";
-import { TimeUtils } from "./utils";
+import { TimeUtils } from "../lib/utils";
 
 const smallEx = `
 x00: 1
