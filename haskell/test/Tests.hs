@@ -4,6 +4,7 @@ import Test.HUnit
 import Grid
 import Y2015D01Tests (y2015D01Tests)
 import Y2019D03Tests (y2019D03Tests)
+import Y2025D01Tests (y2025D01Tests)
 
 -- Example test cases
 testManhattanDistance :: Test
@@ -17,7 +18,8 @@ tests :: Test
 tests = TestList [
     TestLabel "manhattanDistance" testManhattanDistance,
     TestLabel "y2015-d01--not-quite-lisp" y2015D01Tests,
-    TestLabel "y2019-d03--crossed-wires" y2019D03Tests
+    TestLabel "y2019-d03--crossed-wires" y2019D03Tests,
+    TestLabel "y2025-d01--secret-entrance" y2025D01Tests
     ]
 
 main :: IO Counts
