@@ -1,6 +1,7 @@
 import {chunk, collect, filter, range} from "@certes/lazy";
+import {map, reduce} from "@certes/list";
 import {allArraysEqual} from "../lib/utils";
-import {pipe} from "@certes/composition";
+import {compose, pipe} from "@certes/composition";
 
 type Range = [number, number];
 
@@ -55,7 +56,6 @@ export function partOne(input: string) {
         .map((items: number[]) => sumOfInvalidIds(items, isInvalid))
         .reduce((a:number,b:number) => a+b,0);
 }
-
 
 export function partTwo(input: string) {
     return parse(input)
