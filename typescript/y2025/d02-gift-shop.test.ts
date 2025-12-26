@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {isInvalid, isMoreInvalid, partOne, partTwo} from "./d02-gift-shop";
+import {isInvalid, isMoreInvalid, partOne, partTwo, sumOfInvalidIds} from "./d02-gift-shop";
 import {readInput} from "../lib/utils";
 
 const input = readInput("y2025/inputs/d02.txt");

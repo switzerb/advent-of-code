@@ -1,6 +1,7 @@
 import {chunk, collect, range} from "@certes/lazy";
-import {isArrayEqual} from "radashi";
-import {allArraysEqual, toDigits} from "../lib/utils";
+import {allArraysEqual} from "../lib/utils";
+import {pipe} from "@certes/composition";
+import {filter} from "@certes/list";
 
 type Range = [number, number];
 
@@ -29,52 +30,37 @@ export function isInvalid(n: number) {
 
 export function isMoreInvalid(n: number) {
     const digits = n.toString();
-    // if they are all the same number, then it's invalid
     if(everyItemEqual(digits)) return true;
-
     const options = collect(range(2, Math.floor(digits.length / 2)));
-
     for(const option of options) {
         const arrays = collect(chunk(option)(digits));
         const isEqual = allArraysEqual(...arrays);
         if(isEqual) return true;
     }
-
     return false;
 }
 
-export function ranger([start, end]: Range) {
-    return range(start, end);
+export function sumOfInvalidIds(items: number[], isInvalid: (n: number) => boolean): number {
+    const invalidIds =  pipe(
+        filter((n: number) => isInvalid(n)),
+        collect,
+    )(items);
+    return invalidIds.reduce((a: number,b: number) => a+b, 0) as number;
 }
 
-export function partOne(input: string) {
-    const ranges = parse(input);
+const buildRanges = ([start, end]: Range) => range(start, end);
 
-    return ranges
-        .map(ranger)
-        .map(itemsInRange => {
-            let sums = 0;
-            for (const item of itemsInRange) {
-                if(isInvalid(item)) sums += item;
-            }
-            return sums;
-        })
+export function partOne(input: string) {
+    return parse(input)
+        .map(buildRanges)
+        .map((items: number[]) => sumOfInvalidIds(items, isInvalid))
         .reduce((a,b) => a+b,0);
 }
 
 
-
 export function partTwo(input: string) {
-    const ranges = parse(input);
-
-    return ranges
-        .map(ranger)
-        .map(itemsInRange => {
-            let sums = 0;
-            for (const item of itemsInRange) {
-                if(isMoreInvalid(item)) sums += item;
-            }
-            return sums;
-        })
+    return parse(input)
+        .map(buildRanges)
+        .map((items: number[]) => sumOfInvalidIds(items, isMoreInvalid))
         .reduce((a,b) => a+b,0);
 }
