@@ -1,4 +1,4 @@
-import { at, getNeighbors, set } from "./grid";
+import { at, getNeighbors, set } from "../lib/grid";
 
 export function partOne(input: string, steps = 12, dim = 70, test = false) {
 	const bytes = parse(input);

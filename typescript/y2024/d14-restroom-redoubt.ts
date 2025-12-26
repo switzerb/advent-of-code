@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { type Pos, output } from "./grid";
+import { type Pos, output } from "../lib/grid";
 
 export type Robot = {
 	p: Pos;

@@ -1,4 +1,4 @@
-import { type Dir, type Pos, at, next } from "./grid";
+import { type Dir, type Pos, at, next } from "../lib/grid";
 
 function getNeighbors(pos: Pos, w, h): Pos[] {
 	const neighbors = [];

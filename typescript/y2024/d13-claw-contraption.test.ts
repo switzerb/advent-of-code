@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { partOne, partTwo } from "./d13-claw-contraption";
-import type { Pos } from "./grid";
+import type { Pos } from "../lib/grid";
 
 function parse(input: string) {
 	const [, x, y] = /X[=+](\d+),\sY[=+](\d+)/.exec(input) ?? [];

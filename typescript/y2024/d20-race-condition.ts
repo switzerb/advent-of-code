@@ -6,7 +6,7 @@ import {
 	getTarget,
 	inBounds,
 	to2DGrid,
-} from "./grid";
+} from "../lib/grid";
 
 const WALL = "#";
 

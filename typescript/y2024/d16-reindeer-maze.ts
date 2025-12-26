@@ -5,7 +5,7 @@ import {
 	at,
 	getTarget,
 	to2DGrid,
-} from "./grid";
+} from "../lib/grid";
 
 type Step = {
 	pos: Pos;

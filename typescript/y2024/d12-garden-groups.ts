@@ -1,4 +1,4 @@
-import {at, type Dir, getNeighbors, type Grid, inBounds, next, type Pos, to2DGrid} from './grid';
+import {at, type Dir, getNeighbors, type Grid, inBounds, next, type Pos, to2DGrid} from '../lib/grid';
 
 const SIDES = 4;
 

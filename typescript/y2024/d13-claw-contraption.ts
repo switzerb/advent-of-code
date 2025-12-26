@@ -1,4 +1,4 @@
-import type { Pos } from "./grid";
+import type { Pos } from "../lib/grid";
 
 type Game = {
 	a: Pos;

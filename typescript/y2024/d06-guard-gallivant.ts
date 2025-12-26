@@ -1,14 +1,12 @@
-import fs from "node:fs";
 import { cloneDeep } from "lodash";
 import {
 	type Dir,
 	type Pos,
 	getTarget,
 	next,
-	print,
 	to2DGrid,
 	turnRight,
-} from "./grid";
+} from "../lib/grid";
 
 const parse = (input: string) => {
 	const grid = to2DGrid(input);

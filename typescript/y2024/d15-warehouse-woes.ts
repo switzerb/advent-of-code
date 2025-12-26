@@ -1,4 +1,4 @@
-import { getTarget, to2DGrid } from "./grid";
+import { getTarget, to2DGrid } from "../lib/grid";
 
 const run = (grid, movements) => {
 	let [bot_r, bot_c] = getTarget(grid, "@");
