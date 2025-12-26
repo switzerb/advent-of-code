@@ -11,6 +11,9 @@ export const Grid = {
 			.map((line) => line.trim().split("")),
 
 	diff: (a: Pos, b: Pos): Pos => [a[0] - b[0], a[1] - b[1]],
+	width: (grid: Grid) => grid[0].length,
+	height: (grid: Grid) => grid.length,
+	at: (grid: Grid, pos: Pos) => grid[pos[0]][pos[1]],
 };
 
 export const to2DGrid = (input: string) =>
@@ -60,6 +63,14 @@ export function inBounds(pos: Pos, w, h) {
 export function getNeighbors(pos: Pos, w, h, bounded = true): Pos[] {
 	const neighbors = [];
 	for (const dir of ["N", "S", "E", "W"] as Dir[]) {
+		neighbors.push(next(dir, pos));
+	}
+	return bounded ? neighbors.filter((pos) => inBounds(pos, w, h)) : neighbors;
+}
+
+export function getNeighborsFull(pos: Pos, w, h, bounded = true): Pos[] {
+	const neighbors = [];
+	for (const dir of ["N", "S", "E", "W", "NW", "SW", "NE", "SE"] as DirFull[]) {
 		neighbors.push(next(dir, pos));
 	}
 	return bounded ? neighbors.filter((pos) => inBounds(pos, w, h)) : neighbors;
