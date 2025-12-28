@@ -5,6 +5,16 @@ import {readInput} from "../lib/utils";
 
 const input = readInput("y2025/inputs/d05.txt");
 
+/**
+ * 3-5
+ * 10-11
+ * 10-18
+ * 16-20
+ *
+ *
+ */
+
+
 const example = `
 3-5
 10-14
@@ -26,6 +36,7 @@ describe('solutions', () => {
     });
 
     it('runs part two', () => {
-        expect(true).toStrictEqual(true);
+        expect(partTwo(example)).toStrictEqual(14);
+        expect(partTwo(input)).toStrictEqual(342433357244012); // 311541667160941 (low)
     })
 });
