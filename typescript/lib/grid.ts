@@ -123,3 +123,5 @@ export function output(grid: Grid) {
 		})
 		.join("\n");
 }
+
+export const asKey = (pos: Pos) => pos.join("_");
