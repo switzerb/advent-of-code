@@ -1,5 +1,5 @@
 import {describe, it, expect} from "vitest";
-import {partOne} from "./d07-laboratories";
+import {partOne, partTwo} from "./d07-laboratories";
 import {readInput} from "../lib/utils";
 
 const input = readInput("y2025/inputs/d07.txt");
@@ -26,6 +26,11 @@ describe("solutions", () => {
     it('runs day one', () => {
         expect(partOne(example)).toStrictEqual(21);
         expect(partOne(input)).toStrictEqual(1662);
-    })
+    });
+
+    it('runs day two', () => {
+       expect(partTwo(example)).toStrictEqual(40);
+       expect(partTwo(input)).toStrictEqual(40941112789504);
+    });
   }
 )
