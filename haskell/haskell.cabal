@@ -63,6 +63,7 @@ library
                    , Y2015D01
                    , Y2019D03
                    , Y2025D01
+                   , Y2025D02
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.18.3.0
@@ -109,6 +110,7 @@ test-suite tests
     other-modules:    Y2015D01Tests
                    , Y2019D03Tests
                    , Y2025D01Tests
+                   , Y2025D02Tests
 
     -- Other library packages from which modules are imported.
     build-depends:    aoc-haskell
