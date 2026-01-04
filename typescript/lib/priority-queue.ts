@@ -12,12 +12,18 @@ export class PQueue<T> {
         this.#comparator = comparator;
     }
 
-    popMax() : T {
-        const max = this.#queue[1];
-        this.#swap(1, this.#size--);
+    pop() : T {
+        if (this.#size === 0) {
+            throw new Error('Cannot pop from empty queue');
+        }
+        const top = this.#queue[1];
+        this.#swap(1, this.#size);
+        this.#size--;
         this.#queue[this.#size + 1] = null;
-        this.#sink(1);
-        return max;
+        if (this.#size > 0) {
+            this.#sink(1);
+        }
+        return top;
     }
 
     insert(key: T) : void {

@@ -28,7 +28,7 @@ const example = `162,817,812
 describe('solutions', () => {
     it('runs part one', () => {
         expect(partOne(example, 10)).toStrictEqual(40);
-        // expect(partOne(input)).toStrictEqual(0);
+        expect(partOne(input, 1000)).toStrictEqual(112230);
     });
 
 });

@@ -1,4 +1,5 @@
-import {PQueue} from "../lib/pq";
+import {PQueue} from "../lib/priority-queue";
+import {UnionFind} from "../lib/union-find";
 
 type Point3D = [x: number, y: number, z: number];
 type Key = { distance: number, idx1: number, idx2: number}
@@ -13,21 +14,37 @@ function calcDistance([x1,y1,z1]: Point3D, [x2,y2,z2]: Point3D) : number {
     return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2);
 }
 
+function getTop3(arr: number[]) {
+    return arr.toSorted((a,b) => b - a).splice(0,3);
+}
+
 export function partOne(input: string, pairs = 1000) {
     const boxes : Point3D[] = parse(input);
     const queue = new PQueue<Key>(
-        (i: Key,j: Key) => (i.distance > j.distance),
+        (i: Key,j: Key) => (i.distance < j.distance),
         pairs
     );
+
+    let count = 0;
 
     for (let i = 0; i < boxes.length; i++) {
         for(let j = i + 1; j < boxes.length; j++) {
             const distance = calcDistance(boxes[i], boxes[j]);
             queue.insert({distance, idx1: i, idx2: j});
+            if(queue.size() > pairs) {
+                queue.pop();
+            }
         }
     }
 
-    console.log(queue.popMax());
+    const components = new UnionFind(boxes.length);
 
-    return 0;
+    while(count < pairs) {
+        const boxesToConnect = queue.pop();
+        components.union(boxesToConnect.idx1, boxesToConnect.idx2);
+        count++;
+    }
+
+    return getTop3(components.sizes())
+        .reduce((acc, it) => acc * it, 1);
 }
