@@ -68,7 +68,8 @@
             // Create points and lines
             const normalizedPoints = points.map(point => ({
                 x: (point.x - minX) * scale + padding,
-                y: (point.y - minY) * scale + padding
+                y: (point.y - minY) * scale + padding,
+                original: point
             }));
 
             normalizedPoints.forEach(p => {
@@ -76,6 +77,14 @@
                 div.className = 'point';
                 div.style.left = p.x + 'px';
                 div.style.top = p.y + 'px';
+                if (
+                    p.original.x === 2365 && p.original.y === 50265 ||
+                    p.original.x === 94901 && p.original.y === 50265 ||
+                    p.original.x === 94901 && p.original.y === 48488 ||
+                    p.original.x === 1659 && p.original.y === 48488
+                ) {
+                    div.style.backgroundColor = 'blue';
+                }
                 canvas.appendChild(div);
             });
 

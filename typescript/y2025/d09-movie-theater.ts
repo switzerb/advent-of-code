@@ -1,5 +1,4 @@
 import type {Pos} from "../lib/grid";
-import {b} from "vitest/dist/chunks/suite.BJU7kdY9";
 
 function parse(input: string) : Pos[] {
     return input
@@ -20,6 +19,17 @@ export const zip = (p1: Pos[], p2:Pos[]) => {
     return zipped;
 }
 
+export const consecutivePairs = (coords: Pos[]): [Pos, Pos][] => {
+    return coords.slice(0, -1).map((coord, i) => [coord, coords[i + 1]]);
+}
+
+export const maxDistance = ([p1, p2]: [Pos, Pos]) => {
+    return {point: [p1, p2], distance: Math.max(
+        Math.abs(p1[0] - p2[0]),
+        Math.abs(p1[1] - p2[1])
+    )};
+}
+
 export function partOne(input: string) {
     const squares = parse(input);
     const pairs = zip(squares, squares.slice(1));
@@ -29,5 +39,13 @@ export function partOne(input: string) {
 }
 
 export function partTwo(input: string) {
+    const squares = parse(input);
+    const pairs = consecutivePairs(squares);
+    const something = pairs.map(pair => maxDistance(pair)).reduce(
+        (a,b) =>
+            a.distance > b.distance ? a : b);
+
+    console.log(something);
+
     return 0;
 }

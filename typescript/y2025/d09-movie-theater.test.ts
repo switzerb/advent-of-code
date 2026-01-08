@@ -26,7 +26,8 @@ describe('solutions', () => {
     })
 
     it('runs part two', () => {
-        expect(partTwo(example)).toStrictEqual(0);
+        // expect(partTwo(example)).toStrictEqual(0);
+        expect(partTwo(input)).toStrictEqual(0);
     })
 
 });
