@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordinate Visualization - d09</title>
+    <style>
+        .point {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: red;
+        }
+        #canvas {
+            position: relative;
+            background-color: white;
+            overflow: auto;
+        }
+        .line {
+            position: absolute;
+            background-color: green;
+            height: 2px;
+            transform-origin: top left;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas"></div>
+
+    <script>
+        async function loadCoordinates() {
+            try {
+                const response = await fetch('inputs/d09.txt');
+                const text = await response.text();
+                return text.trim().split('\n');
+            } catch (error) {
+                console.error('Error loading file:', error);
+            }
+        }
+
+        function processCoordinates(coordinates) {
+            if (!coordinates || coordinates.length === 0) {
+                return;
+            }
+
+            // Parse coordinates
+            const points = coordinates.map(line => {
+                const [x, y] = line.split(',').map(Number);
+                return { x, y };
+            });
+
+            // Find min/max for scaling
+            const xs = points.map(p => p.x);
+            const ys = points.map(p => p.y);
+            const minX = Math.min(...xs);
+            const maxX = Math.max(...xs);
+            const minY = Math.min(...ys);
+            const maxY = Math.max(...ys);
+
+            // Calculate dimensions
+            const width = maxX - minX;
+            const height = maxY - minY;
+            const padding = 20;
+
+            const maxDisplay = Math.min(window.innerWidth - 100, 1200);
+            const scaleX = maxDisplay / width;
+            const scaleY = maxDisplay / height;
+            const scale = Math.min(scaleX, scaleY, 1); // Don't scale up, only down
+
+            const displayWidth = width * scale + padding * 2;
+            const displayHeight = height * scale + padding * 2;
+
+            const canvas = document.getElementById('canvas');
+            canvas.innerHTML = '';
+            canvas.style.width = displayWidth + 'px';
+            canvas.style.height = displayHeight + 'px';
+
+            // Create points
+            const normalizedPoints = points.map(point => {
+                const normalizedX = (point.x - minX) * scale + padding;
+                const normalizedY = (point.y - minY) * scale + padding;
+                return { x: normalizedX, y: normalizedY, original: point };
+            });
+
+            normalizedPoints.forEach(normalizedPoint => {
+                const div = document.createElement('div');
+                div.className = 'point';
+                div.style.left = normalizedPoint.x + 'px';
+                div.style.top = normalizedPoint.y + 'px';
+                canvas.appendChild(div);
+            });
+
+            // Draw lines between consecutive points
+            for (let i = 0; i < normalizedPoints.length - 1; i++) {
+                const start = normalizedPoints[i];
+                const end = normalizedPoints[i + 1];
+                
+                const dx = end.x - start.x;
+                const dy = end.y - start.y;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+                
+                const line = document.createElement('div');
+                line.className = 'line';
+                line.style.left = start.x + 'px';
+                line.style.top = start.y + 'px';
+                line.style.width = length + 'px';
+                line.style.transform = `rotate(${angle}deg)`;
+                canvas.appendChild(line);
+            }
+        }
+
+        // Load coordinates on page load
+        loadCoordinates().then(coordinates => {
+            if (coordinates) {
+                processCoordinates(coordinates);
+            }
+        });
+    </script>
+</body>
+</html>
+
