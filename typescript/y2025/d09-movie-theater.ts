@@ -30,6 +30,30 @@ export const maxDistance = ([p1, p2]: [Pos, Pos]) => {
     )};
 }
 
+export const findPoint = (
+    boxes: Pos[], 
+    predicate: (point: Pos) => boolean,
+    startIndex: number | undefined,
+    fromEnd = false
+): { point: Pos; index: number } | null => {
+    const defaultStart = fromEnd ? boxes.length - 1 : 0;
+    const start = startIndex ?? defaultStart;
+    if (fromEnd) {
+        for (let i = start; i >= 0; i--) {
+            if (predicate(boxes[i])) {
+                return { point: boxes[i], index: i };
+            }
+        }
+    } else {
+        for (let i = start; i < boxes.length; i++) {
+            if (predicate(boxes[i])) {
+                return { point: boxes[i], index: i };
+            }
+        }
+    }
+    return null;
+}
+
 export function partOne(input: string) {
     const squares = parse(input);
     const pairs = zip(squares, squares.slice(1));
@@ -39,13 +63,31 @@ export function partOne(input: string) {
 }
 
 export function partTwo(input: string) {
-    const squares = parse(input);
-    const pairs = consecutivePairs(squares);
-    const something = pairs.map(pair => maxDistance(pair)).reduce(
-        (a,b) =>
-            a.distance > b.distance ? a : b);
+    const boxes = parse(input);
+    const magicTop =  [94901, 48488] as Pos;
+    const magicBottom = [94901, 50265] as Pos;
+    let topRect = 0;
+    let bottomRect = 0;
 
-    console.log(something);
+    const topBox = findPoint(boxes, (point) => point[0] <= magicTop[0], boxes.length - 1, true);
 
+    if(topBox) {
+        const yResult = findPoint(boxes, (point) => point[1] >= topBox.point[1], topBox.index - 1, true);
+        topRect = calcArea(magicTop, yResult.point); // 1441310195
+    }
+
+    /**
+     * In order from the beginning, find the first box that has an x coordinate
+     * that is smaller or equal to the magic bottom x coordinate.
+     */
+    const bottomBox = findPoint(boxes, (point) => point[0] <= magicBottom[0], 0);
+
+    if(bottomBox) {
+        const yResult = findPoint(boxes, (point) => point[1] <= bottomBox.point[1], bottomBox.index + 1);
+        bottomRect = calcArea(magicBottom, yResult.point);
+    } // 1708880105
+
+    console.log(bottomRect, topRect);
+    console.log(Math.max(topRect, bottomRect));
     return 0;
 }

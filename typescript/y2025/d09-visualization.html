@@ -72,17 +72,24 @@
                 original: point
             }));
 
+            const isTop = (p) => p.original.x === 94901 && p.original.y === 48488
+            const isBottom = (p) => p.original.x === 94901 && p.original.y === 50265
+
             normalizedPoints.forEach(p => {
                 const div = document.createElement('div');
                 div.className = 'point';
                 div.style.left = p.x + 'px';
                 div.style.top = p.y + 'px';
-                if (
-                    p.original.x === 2365 && p.original.y === 50265 ||
-                    p.original.x === 94901 && p.original.y === 50265 ||
-                    p.original.x === 94901 && p.original.y === 48488 ||
-                    p.original.x === 1659 && p.original.y === 48488
-                ) {
+
+                if(p.original.x === 5921 && p.original.y === 67692) {
+                  div.style.backgroundColor = 'blue';
+                }
+
+              if(p.original.x === 94423 && p.original.y === 68050) {
+                div.style.backgroundColor = 'blue';
+              }
+
+              if (isTop(p) || isBottom(p)) {
                     div.style.backgroundColor = 'blue';
                 }
                 canvas.appendChild(div);
