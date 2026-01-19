@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {minButtonPresses, parse, partOne} from "./d10-factory";
+import {minButtonPresses, parse, partOne, incrementJoltage} from "./d10-factory";
 import {readInput} from "../lib/utils";
 
 const example = `[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
@@ -7,6 +7,51 @@ const example = `[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
 [.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}`;
 
 const input = readInput("y2025/inputs/d10.txt");
+
+describe('incrementJoltage', () => {
+    it('increments joltage at specified positions', () => {
+        const joltage = [0, 1, 2, 3];
+        const button = [1, 3];
+        const result = incrementJoltage(joltage, button);
+
+        expect(result).toEqual([0, 2, 2, 4]);
+        // Verify original array is not mutated
+        expect(joltage).toEqual([0, 1, 2, 3]);
+    });
+
+    it('handles empty button positions', () => {
+        const joltage = [1, 2, 3];
+        const button: number[] = [];
+        const result = incrementJoltage(joltage, button);
+
+        expect(result).toEqual([1, 2, 3]);
+    });
+
+    it('handles single position', () => {
+        const joltage = [0, 0, 0];
+        const button = [1];
+        const result = incrementJoltage(joltage, button);
+
+        expect(result).toEqual([0, 1, 0]);
+    });
+
+    it('handles multiple increments on same array', () => {
+        let joltage = [0, 0, 0, 0];
+        joltage = incrementJoltage(joltage, [1, 3]); // [0, 1, 0, 1]
+        joltage = incrementJoltage(joltage, [0, 1]); // [1, 2, 0, 1]
+        joltage = incrementJoltage(joltage, [2]);    // [1, 2, 1, 1]
+
+        expect(joltage).toEqual([1, 2, 1, 1]);
+    });
+
+    it('increments all positions when button affects all', () => {
+        const joltage = [0, 0, 0, 0];
+        const button = [0, 1, 2, 3];
+        const result = incrementJoltage(joltage, button);
+
+        expect(result).toEqual([1, 1, 1, 1]);
+    });
+});
 
 describe('parsing', () => {
     it('parses machine input correctly', () => {

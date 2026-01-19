@@ -28,12 +28,14 @@ export function parse(input: string): Machine[] {
 
 type MachineState = {
     indicator: string;
+    joltage: number[];
     pressedButtons: Set<number>;
     steps: number;
 };
 
 const initialize = (length: number): MachineState => ({
     indicator: '.'.repeat(length),
+    joltage: Array.from({ length }).fill(0) as number[],
     pressedButtons: new Set(),
     steps: 0
 });
@@ -47,12 +49,16 @@ const togglePositions = (pattern: string, positions: number[]): string =>
         .map((char, idx) => positions.includes(idx) ? (char === '#' ? '.' : '#') : char)
         .join('');
 
+export const incrementJoltage = (joltage: number[], positions: number[]): number[] =>
+    joltage.map((value, idx) => positions.includes(idx) ? value + 1 : value);
+
 const getUnpressedButtons = (totalButtons: number, pressed: Set<number>): number[] =>
     Array.from({ length: totalButtons }, (_, i) => i)
         .filter(i => !pressed.has(i));
 
 const pressButton = (current: MachineState, buttonIndex: number, button: number[]): MachineState => ({
     indicator: togglePositions(current.indicator, button),
+    joltage: incrementJoltage(current.joltage,button),
     pressedButtons: new Set([...current.pressedButtons, buttonIndex]),
     steps: current.steps + 1
 });
