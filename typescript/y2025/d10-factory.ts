@@ -26,23 +26,33 @@ export function parse(input: string): Machine[] {
     });
 }
 
-type MachineState = {
+type IndicatorState = {
     indicator: string;
-    joltage: number[];
     pressedButtons: Set<number>;
     steps: number;
 };
 
-const initialize = (length: number): MachineState => ({
+type JoltageState = {
+    joltage: number[];
+    steps: number;
+};
+
+const initIndicator = (length: number): IndicatorState => ({
     indicator: '.'.repeat(length),
-    joltage: Array.from({ length }).fill(0) as number[],
     pressedButtons: new Set(),
     steps: 0
 });
 
-// generate key for deduplication
-const stateKey = (pattern: string, pressed: Set<number>): string =>
+const initJoltage = (length: number) : JoltageState => ({
+    joltage: Array(length).fill(0),
+    steps: 0
+})
+
+// because javascript can't do sets correctly with arrays
+const indicatorKey = (pattern: string, pressed: Set<number>): string =>
     `${pattern}|${[...pressed].sort().join(',')}`;
+
+const joltageKey = (joltage: number[]): string => joltage.join(',');
 
 const togglePositions = (pattern: string, positions: number[]): string =>
     pattern.split('')
@@ -56,22 +66,21 @@ const getUnpressedButtons = (totalButtons: number, pressed: Set<number>): number
     Array.from({ length: totalButtons }, (_, i) => i)
         .filter(i => !pressed.has(i));
 
-const pressButton = (current: MachineState, buttonIndex: number, button: number[]): MachineState => ({
+const pressButton = (current: IndicatorState, buttonIndex: number, button: number[]): IndicatorState => ({
     indicator: togglePositions(current.indicator, button),
-    joltage: incrementJoltage(current.joltage,button),
     pressedButtons: new Set([...current.pressedButtons, buttonIndex]),
     steps: current.steps + 1
 });
 
 const getNextIndicatorState = (
-    current: MachineState,
+    current: IndicatorState,
     buttons: number[][],
     visited: Set<string>
-): MachineState[] => {
+): IndicatorState[] => {
     return getUnpressedButtons(buttons.length, current.pressedButtons)
         .map(buttonIndex => pressButton(current, buttonIndex, buttons[buttonIndex]))
         .filter(state => {
-            const key = stateKey(state.indicator, state.pressedButtons);
+            const key = indicatorKey(state.indicator, state.pressedButtons);
             if (visited.has(key)) return false;
             visited.add(key);
             return true;
@@ -84,11 +93,11 @@ const getNextIndicatorState = (
  * @returns The minimum number of button presses, or -1 if impossible
  */
 export function minButtonPresses(machine: Machine): number {
-    const initial = initialize(machine.target.length);
+    const initial = initIndicator(machine.target.length);
     if (initial.indicator === machine.target) return 0;
 
-    const visited = new Set([stateKey(initial.indicator, initial.pressedButtons)]);
-    const queue: MachineState[] = [initial];
+    const visited = new Set([indicatorKey(initial.indicator, initial.pressedButtons)]);
+    const queue: IndicatorState[] = [initial];
 
     while (queue.length > 0) {
         const current = queue.shift();
@@ -103,9 +112,52 @@ export function minButtonPresses(machine: Machine): number {
         queue.push(...nextStates);
     }
 
-    return -1; // Target unreachable
+    throw new Error('Target unreachable');
 }
 
+const matchesTarget = (current: number[], target: number[]): boolean =>
+    current.length === target.length && current.every((val, idx) => val === target[idx]);
+
+const exceedsTarget = (current: number[], target: number[]): boolean =>
+    current.some((val, idx) => val > target[idx]);
+
+/**
+ * Find minimum button presses to reach joltage requirements.
+ * Buttons can be pressed multiple times.
+ * @param machine - The machine with joltage requirements
+ * @returns The minimum number of button presses, or -1 if impossible
+ */
+export function minJoltagePresses(machine: Machine): number {
+    const initial: JoltageState = initJoltage(machine.joltage.length);
+    if (matchesTarget(initial.joltage, machine.joltage)) return 0;
+
+    const visited = new Set([joltageKey(initial.joltage)]);
+    const queue: JoltageState[] = [initial];
+
+    while (queue.length > 0) {
+        const current = queue.shift();
+        if (!current) break;
+
+        // can press the same button multiple times
+        for (const button of machine.buttons) {
+            const next = incrementJoltage(current.joltage, button);
+            if (exceedsTarget(next, machine.joltage)) continue; // dead end
+            if (matchesTarget(next, machine.joltage)) return current.steps + 1; // bingo
+
+            // add to queue
+            const key = joltageKey(next);
+            if (!visited.has(key)) {
+                visited.add(key);
+                queue.push({
+                    joltage: next,
+                    steps: current.steps + 1
+                });
+            }
+        }
+    }
+
+    throw new Error('Target unreachable');
+}
 
 export function partOne(input: string) {
     const machines = parse(input);
@@ -114,8 +166,5 @@ export function partOne(input: string) {
 
 export function partTwo(input: string) {
     const machines = parse(input);
-    for(const machine of machines) {
-        console.log(machine);
-    }
-    return 0;
+    return machines.reduce((acc, machine) => acc + minJoltagePresses(machine), 0);
 }
