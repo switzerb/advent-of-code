@@ -35,5 +35,4 @@ describe('solutions', () => {
         expect(partTwo(example)).toStrictEqual(25272);
         expect(partTwo(input)).toStrictEqual(2573952864);
     })
-
 });
