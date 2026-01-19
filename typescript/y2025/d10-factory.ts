@@ -26,14 +26,14 @@ export function parse(input: string): Machine[] {
     });
 }
 
-type State = {
-    pattern: string;
+type MachineState = {
+    indicator: string;
     pressedButtons: Set<number>;
     steps: number;
 };
 
-const initialize = (length: number): State => ({
-    pattern: '.'.repeat(length),
+const initialize = (length: number): MachineState => ({
+    indicator: '.'.repeat(length),
     pressedButtons: new Set(),
     steps: 0
 });
@@ -51,21 +51,21 @@ const getUnpressedButtons = (totalButtons: number, pressed: Set<number>): number
     Array.from({ length: totalButtons }, (_, i) => i)
         .filter(i => !pressed.has(i));
 
-const pressButton = (current: State, buttonIndex: number, button: number[]): State => ({
-    pattern: togglePositions(current.pattern, button),
+const pressButton = (current: MachineState, buttonIndex: number, button: number[]): MachineState => ({
+    indicator: togglePositions(current.indicator, button),
     pressedButtons: new Set([...current.pressedButtons, buttonIndex]),
     steps: current.steps + 1
 });
 
-const generateNextStates = (
-    current: State,
+const getNextIndicatorState = (
+    current: MachineState,
     buttons: number[][],
     visited: Set<string>
-): State[] => {
+): MachineState[] => {
     return getUnpressedButtons(buttons.length, current.pressedButtons)
         .map(buttonIndex => pressButton(current, buttonIndex, buttons[buttonIndex]))
         .filter(state => {
-            const key = stateKey(state.pattern, state.pressedButtons);
+            const key = stateKey(state.indicator, state.pressedButtons);
             if (visited.has(key)) return false;
             visited.add(key);
             return true;
@@ -79,19 +79,19 @@ const generateNextStates = (
  */
 export function minButtonPresses(machine: Machine): number {
     const initial = initialize(machine.target.length);
-    if (initial.pattern === machine.target) return 0;
+    if (initial.indicator === machine.target) return 0;
 
-    const visited = new Set([stateKey(initial.pattern, initial.pressedButtons)]);
-    const queue: State[] = [initial];
+    const visited = new Set([stateKey(initial.indicator, initial.pressedButtons)]);
+    const queue: MachineState[] = [initial];
 
     while (queue.length > 0) {
         const current = queue.shift();
         if (!current) break;
 
-        const nextStates = generateNextStates(current, machine.buttons, visited);
+        const nextStates = getNextIndicatorState(current, machine.buttons, visited);
 
         // Check if any next state reaches the target
-        const solution = nextStates.find(state => state.pattern === machine.target);
+        const solution = nextStates.find(state => state.indicator === machine.target);
         if (solution) return solution.steps;
 
         queue.push(...nextStates);
@@ -104,4 +104,12 @@ export function minButtonPresses(machine: Machine): number {
 export function partOne(input: string) {
     const machines = parse(input);
     return machines.reduce((acc, machine) => acc + minButtonPresses(machine), 0);
+}
+
+export function partTwo(input: string) {
+    const machines = parse(input);
+    for(const machine of machines) {
+        console.log(machine);
+    }
+    return 0;
 }
