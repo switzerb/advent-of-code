@@ -121,39 +121,51 @@ const matchesTarget = (current: number[], target: number[]): boolean =>
 const exceedsTarget = (current: number[], target: number[]): boolean =>
     current.some((val, idx) => val > target[idx]);
 
+// Calculate heuristic: total remaining deficit
+const remainingDeficit = (current: number[], target: number[]): number =>
+    target.reduce((sum, val, idx) => sum + Math.max(0, val - current[idx]), 0);
+
 /**
- * Find minimum button presses to reach joltage requirements.
- * Buttons can be pressed multiple times.
+ * Find minimum button presses using beam search (BFS with limited states per level).
  * @param machine - The machine with joltage requirements
- * @returns The minimum number of button presses, or -1 if impossible
+ * @returns The minimum number of button presses
  */
 export function minJoltagePresses(machine: Machine): number {
-    const initial: JoltageState = initJoltage(machine.joltage.length);
+    const initial = initJoltage(machine.joltage.length);
     if (matchesTarget(initial.joltage, machine.joltage)) return 0;
 
+    const BEAM_WIDTH = 50000; // Keep top 5000 states per level
+    let currentLevel: JoltageState[] = [initial];
     const visited = new Set([joltageKey(initial.joltage)]);
-    const queue: JoltageState[] = [initial];
 
-    while (queue.length > 0) {
-        const current = queue.shift();
-        if (!current) break;
+    while (currentLevel.length > 0) {
+        const nextLevel: JoltageState[] = [];
 
-        // can press the same button multiple times
-        for (const button of machine.buttons) {
-            const next = incrementJoltage(current.joltage, button);
-            if (exceedsTarget(next, machine.joltage)) continue; // dead end
-            if (matchesTarget(next, machine.joltage)) return current.steps + 1; // bingo
+        for (const state of currentLevel) {
+            for (const button of machine.buttons) {
+                const next = incrementJoltage(state.joltage, button);
 
-            // add to queue
-            const key = joltageKey(next);
-            if (!visited.has(key)) {
-                visited.add(key);
-                queue.push({
-                    joltage: next,
-                    steps: current.steps + 1
-                });
+                if (exceedsTarget(next, machine.joltage)) continue;
+                if (matchesTarget(next, machine.joltage)) {
+                    return state.steps + 1;
+                }
+
+                const key = joltageKey(next);
+                if (!visited.has(key)) {
+                    visited.add(key);
+                    nextLevel.push({
+                        joltage: next,
+                        steps: state.steps + 1
+                    });
+                }
             }
         }
+
+        // Prune: keep only top BEAM_WIDTH states by heuristic (lowest remaining deficit)
+        nextLevel.sort((a, b) =>
+            remainingDeficit(a.joltage, machine.joltage) - remainingDeficit(b.joltage, machine.joltage)
+        );
+        currentLevel = nextLevel.slice(0, BEAM_WIDTH);
     }
 
     throw new Error('Target unreachable');
