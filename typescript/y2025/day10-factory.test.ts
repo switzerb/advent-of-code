@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {minButtonPresses, minJoltagePresses, parse, partOne, partTwo, incrementJoltage} from "./d10-factory";
+import {minButtonPresses, minJoltagePresses, parse, partOne, partTwo, incrementJoltage, bitMask} from "./d10-factory";
 import {readInput} from "../lib/utils";
 
 const example = `[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
@@ -163,6 +163,13 @@ describe('minJoltagePresses', () => {
         expect(minJoltagePresses(machine3)).toStrictEqual(11);
     });
 });
+
+describe('bitmask', () => {
+    it('does something?', () => {
+        const button = [1, 3];
+        console.log(bitMask(button, 6).toString(2).padStart(6, '0'));
+    })
+})
 
 describe('solutions', () => {
     it('runs part one', () => {

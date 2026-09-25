@@ -171,6 +171,16 @@ export function minJoltagePresses(machine: Machine): number {
     throw new Error('Target unreachable');
 }
 
+export const bitMask = (button: number[], length: number): number => {
+    let mask = 0b0;
+    for (const idx of button) {
+        mask |= 1 << idx;
+    }
+    return mask;
+}
+
+
+
 export function partOne(input: string) {
     const machines = parse(input);
     return machines.reduce((acc, machine) => acc + minButtonPresses(machine), 0);
