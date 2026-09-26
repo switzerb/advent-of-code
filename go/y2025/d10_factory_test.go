@@ -83,4 +83,20 @@ func TestPartOne(t *testing.T) {
 			t.Errorf("partOne(input) = %d, want %d", got, want)
 		}
 	})
+
+	t.Run("button toggle", func(t *testing.T) {
+		actual := Button{1, 3}.mask()
+		expected := uint(0b1010)
+		if actual != expected {
+			t.Errorf("Button{1,3}.mask() = %b, expected %b", actual, expected)
+		}
+	})
+
+	t.Run("indicator toggle", func(t *testing.T) {
+		actual := Indicator(".##.").mask()
+		expected := uint(0b0110)
+		if actual != expected {
+			t.Errorf("Indicator(\".##.\").mask() = %b, expected %b", actual, expected)
+		}
+	})
 }

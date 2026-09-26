@@ -28,6 +28,32 @@ indicator lights are all initially off
 
 type Button []int
 
+func (b Button) mask() uint {
+	var mask uint
+	for _, n := range b {
+		mask |= 1 << n
+	}
+	return mask
+}
+
+type Indicator string
+
+func (i Indicator) mask() uint {
+	var mask uint
+	for idx, r := range i {
+		if r == '#' {
+			mask |= 1 << idx
+		}
+	}
+	return mask
+}
+
+type State struct {
+	indicator uint
+	pressed   uint
+	steps     int
+}
+
 type Machine struct {
 	target  string
 	buttons []Button
@@ -85,10 +111,54 @@ func parse(input string) []Machine {
 	return machines
 }
 
+func minButtonPresses(m Machine) int {
+	target := Indicator(m.target).mask()
+	var initial State
+
+	if initial.indicator == target {
+		return 0
+	}
+	visited := map[State]bool{}
+	visited[initial] = true
+
+	queue := []State{initial}
+
+	for len(queue) > 0 {
+		current := queue[0]
+		queue = queue[1:]
+
+		for idx, button := range m.buttons {
+			buttonBit := uint(1) << idx
+			if current.pressed&buttonBit != 0 {
+				continue
+			}
+
+			next := State{
+				indicator: current.indicator ^ button.mask(),
+				pressed:   current.pressed | buttonBit,
+				steps:     current.steps + 1,
+			}
+
+			if next.indicator == target {
+				return next.steps
+			}
+
+			if !visited[next] {
+				visited[next] = true
+				queue = append(queue, next)
+			}
+		}
+	}
+
+	panic("target unreachable")
+}
+
 func partOne(input string) int {
-	machines := parse(input)
-	fmt.Println(machines)
-	return 0
+	total := 0
+	for _, m := range parse(input) {
+		total += minButtonPresses(m)
+	}
+	return total
 }
 
 func main() {
